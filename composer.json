@@ -1,1 +1,12 @@
-{}
+{
+  "require": {
+    "php": "^7.2",
+    "ext-gd": "*",
+    "meyfa/php-svg": "^0.9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ProcGen\\": "src/ProcGen"
+    }
+  }
+}
