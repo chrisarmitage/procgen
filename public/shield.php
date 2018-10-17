@@ -4,18 +4,6 @@ use ProcGen\HeaterShield;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$f = scandir(__DIR__);
-error_log('scandir : __DIR__ : ' . implode(' // ', $f));
-
-$f = scandir(__DIR__ . '/../');
-error_log('scandir : __DIR__/.. : ' . implode(' // ', $f));
-
-$f = file_get_contents(__DIR__ . '/../vendor/composer/autoload_psr4.php');
-error_log('autoload_psr4 : ' . $f);
-
-$f = file_get_contents(__DIR__ . '/../vendor/composer/autoload_static.php');
-error_log('autoload_static : ' . $f);
-
 $id = isset($_GET['id']) ? $_GET['id'] : 0;
 
 mt_srand($id);
