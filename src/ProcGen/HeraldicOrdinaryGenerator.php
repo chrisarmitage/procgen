@@ -13,7 +13,7 @@ class HeraldicOrdinaryGenerator
     /**
      * @return SVGNode
      */
-    public function random()
+    public function random($params)
     {
         $methods = [
             'bend',
@@ -22,6 +22,7 @@ class HeraldicOrdinaryGenerator
         ];
 
         $method = $methods[mt_rand(0, count($methods) - 1)];
+        $method = $params['ordinary'] ?? $method;
 
         return $this->{$method}();
     }

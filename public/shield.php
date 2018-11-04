@@ -13,7 +13,7 @@ $types = [
 
 $type = $types[mt_rand(0, count($types) - 1)];
 $gen = new $type;
-$image = $gen->generate($id);
+$image = $gen->generate($id, $_GET);
 
 header('Content-Type: image/svg+xml');
 echo $image;

@@ -10,7 +10,7 @@ use SVG\SVG;
 
 class HeaterShield extends Shield
 {
-    public function generate($seed)
+    public function generate($seed, $params)
     {
         mt_srand($seed);
         $size = 128;
@@ -18,6 +18,7 @@ class HeaterShield extends Shield
         $center = $size / 2;
 
         $heraldicOrdinaryGenerator = new HeraldicOrdinaryGenerator();
+        $heraldicPartyGenerator = new HeraldicPartyGenerator();
 
         $image = new SVG($size, $size);
         $doc = $image->getDocument();
@@ -75,10 +76,30 @@ class HeaterShield extends Shield
             ->setAttribute('clip-path', 'url(#outline)');
         $doc->addChild($back);
 
-        $bend = $heraldicOrdinaryGenerator->random();
-        $bend->setStyle('fill', $foreground);
-        $bend->setAttribute('clip-path', 'url(#outline)');
-        $doc->addChild($bend);
+        $fieldTypeRoll = mt_rand(1, 100);
+        if ($fieldTypeRoll <= 45) {
+            $fieldType = 'ordinary';
+        } else if ($fieldTypeRoll <= 90) {
+            $fieldType = 'party';
+        } else {
+            $fieldType = 'blank';
+        }
+        $fieldType = $params['fieldType'] ?? $fieldType;
+
+        switch ($fieldType) {
+            case 'ordinary':
+                $ordinary = $heraldicOrdinaryGenerator->random($params);
+                $ordinary->setStyle('fill', $foreground);
+                $ordinary->setAttribute('clip-path', 'url(#outline)');
+                $doc->addChild($ordinary);
+                break;
+            case 'party':
+                $party = $heraldicPartyGenerator->random($params);
+                $party->setStyle('fill', $foreground);
+                $party->setAttribute('clip-path', 'url(#outline)');
+                $doc->addChild($party);
+                break;
+        }
 
         $doc->addChild($outline);
 
