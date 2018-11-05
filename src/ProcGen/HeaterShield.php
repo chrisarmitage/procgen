@@ -89,9 +89,21 @@ class HeaterShield extends Shield
         switch ($fieldType) {
             case 'ordinary':
                 $ordinary = $heraldicOrdinaryGenerator->random($params);
-                $ordinary->setStyle('fill', $foreground);
-                $ordinary->setAttribute('clip-path', 'url(#outline)');
-                $doc->addChild($ordinary);
+                if (is_array($ordinary) === false) {
+                    $ordinary = [$ordinary];
+                }
+                foreach ($ordinary as $paths) {
+                    $fill = $paths->getStyle('fill');
+                    $paths->setStyle(
+                        'fill',
+                        ($fill ?? $foreground)
+                    );
+                    if ($paths->getStyle('stroke-width') !== null) {
+                        $paths->setStyle('stroke', $foreground);
+                    }
+                    $paths->setAttribute('clip-path', 'url(#outline)');
+                    $doc->addChild($paths);
+                }
                 break;
             case 'party':
                 $party = $heraldicPartyGenerator->random($params);
