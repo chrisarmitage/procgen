@@ -107,9 +107,21 @@ class HeaterShield extends Shield
                 break;
             case 'party':
                 $party = $heraldicPartyGenerator->random($params);
-                $party->setStyle('fill', $foreground);
-                $party->setAttribute('clip-path', 'url(#outline)');
-                $doc->addChild($party);
+                if (is_array($party) === false) {
+                    $party = [$party];
+                }
+                foreach ($party as $paths) {
+                    $fill = $paths->getStyle('fill');
+                    $paths->setStyle(
+                        'fill',
+                        ($fill ?? $foreground)
+                    );
+                    if ($paths->getStyle('stroke-width') !== null) {
+                        $paths->setStyle('stroke', $foreground);
+                    }
+                    $paths->setAttribute('clip-path', 'url(#outline)');
+                    $doc->addChild($paths);
+                }
                 break;
         }
 

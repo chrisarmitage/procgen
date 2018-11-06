@@ -21,6 +21,7 @@ class HeraldicPartyGenerator
             'fess',
             'saltire',
             'chevron',
+            'gyronny',
         ];
 
         $method = $methods[mt_rand(0, count($methods) - 1)];
@@ -127,6 +128,49 @@ class HeraldicPartyGenerator
         );
 
         return $polygon;
+    }
+
+    protected function gyronny()
+    {
+        $polygons = [];
+        $polygons[] = new SVGPolygon(
+            $this->generatePoints(
+                [
+                    [  0,  0],
+                    [  0, -8],
+                    [  8, -8],
+                ]
+            )
+        );
+        $polygons[] = new SVGPolygon(
+            $this->generatePoints(
+                [
+                    [  0,  0],
+                    [  8,  0],
+                    [  8,  8],
+                ]
+            )
+        );
+        $polygons[] = new SVGPolygon(
+            $this->generatePoints(
+                [
+                    [  0,  0],
+                    [  0,  8],
+                    [ -8,  8],
+                ]
+            )
+        );
+        $polygons[] = new SVGPolygon(
+            $this->generatePoints(
+                [
+                    [  0,  0],
+                    [ -8,  0],
+                    [ -8, -8],
+                ]
+            )
+        );
+
+        return $polygons;
     }
 
     protected function generatePoints($points)

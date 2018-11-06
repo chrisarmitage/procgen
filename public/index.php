@@ -36,6 +36,7 @@
         <option value="fess">Fess</option>
         <option value="saltire">Saltire</option>
         <option value="chevron">Chevron</option>
+        <option value="gyronny">Gyronny</option>
     </select>
 
     <div style="clear: both;"></div>
@@ -49,9 +50,9 @@
         el: '#app',
         data: {
             shield: {
-                fieldType: '',
+                fieldType: 'party',
                 ordinary: '',
-                party: '',
+                party: 'gyronny',
             }
         }
     })
