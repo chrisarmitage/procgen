@@ -5,6 +5,30 @@
 </head>
 <body>
 <div id="app">
+    <select v-model="shield.foreground">
+        <option value="">Random</option>
+        <option disabled >Metals</option>
+        <option value="ffdc0a">Gold</option>
+        <option value="f0f0f0">Silver</option>
+        <option disabled >Colours</option>
+        <option value="0000ff">Blue</option>
+        <option value="ff0000">Red</option>
+        <option value="aa00aa">Purple</option>
+        <option value="000000">Black</option>
+        <option value="009600">Green</option>
+    </select>
+    <select v-model="shield.background">
+        <option value="">Random</option>
+        <option disabled >Metals</option>
+        <option value="ffdc0a">Gold</option>
+        <option value="f0f0f0">Silver</option>
+        <option disabled >Colours</option>
+        <option value="0000ff">Blue</option>
+        <option value="ff0000">Red</option>
+        <option value="aa00aa">Purple</option>
+        <option value="000000">Black</option>
+        <option value="009600">Green</option>
+    </select>
     <select v-model="shield.fieldType">
         <option value="">Random</option>
         <option value="ordinary">Ordinary</option>
@@ -42,7 +66,12 @@
     <div style="clear: both;"></div>
 
     <div v-for="index in 50" :key="index" style="float: left;">
-        <img v-bind:src="'./shield.php?id=' + index + '&fieldType=' + shield.fieldType + '&ordinary=' + shield.ordinary + '&party=' + shield.party" />
+        <img v-bind:src="'./shield.php?id=' + index
+         + '&foreground=' + shield.foreground
+         + '&background=' + shield.background
+         + '&fieldType=' + shield.fieldType
+         + '&ordinary=' + shield.ordinary
+         + '&party=' + shield.party" />
     </div>
 </div>
 <script>
@@ -50,9 +79,11 @@
         el: '#app',
         data: {
             shield: {
-                fieldType: 'party',
+                foreground: 'ffdc0a',
+                background: '000000',
+                fieldType: '',
                 ordinary: '',
-                party: 'gyronny',
+                party: '',
             }
         }
     })

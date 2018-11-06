@@ -68,8 +68,13 @@ class HeaterShield extends Shield
         $foreground = $colours[array_rand($colours)];
 
         if (mt_rand(1, 2) === 1) {
-            list($background, $foreground) = [$foreground, $background];
+            if (empty($params['foreground']) && empty($params['background'])) {
+                list($background, $foreground) = [$foreground, $background];
+            }
         }
+
+        $foreground = !empty($params['foreground']) ? '#' . $params['foreground'] : $foreground;
+        $background = !empty($params['background']) ? '#' . $params['background'] : $background;
 
         $back = new SVGRect(0, 0, $size, $size);
         $back->setStyle('fill', $background)
