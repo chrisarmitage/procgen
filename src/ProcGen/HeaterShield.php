@@ -84,7 +84,7 @@ class HeaterShield extends Shield
         } else {
             $fieldType = 'blank';
         }
-        $fieldType = $params['fieldType'] ?? $fieldType;
+        $fieldType = !empty($params['fieldType']) ? $params['fieldType'] : $fieldType;
 
         switch ($fieldType) {
             case 'ordinary':

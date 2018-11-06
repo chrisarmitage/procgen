@@ -24,7 +24,7 @@ class HeraldicPartyGenerator
         ];
 
         $method = $methods[mt_rand(0, count($methods) - 1)];
-        $method = $params['party'] ?? $method;
+        $method = !empty($params['party']) ? $params['party'] : $method;
 
         return $this->{$method}();
     }

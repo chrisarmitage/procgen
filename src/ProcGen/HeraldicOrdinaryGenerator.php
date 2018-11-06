@@ -35,7 +35,7 @@ class HeraldicOrdinaryGenerator
         ];
 
         $method = $methods[mt_rand(0, count($methods) - 1)];
-        $method = $params['ordinary'] ?? $method;
+        $method = !empty($params['ordinary']) ? $params['ordinary'] : $method;
 
         return $this->{$method}();
     }
