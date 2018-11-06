@@ -33,6 +33,7 @@
         <option value="">Random</option>
         <option value="ordinary">Ordinary</option>
         <option value="party">Party</option>
+        <option value="charge">Charge</option>
     </select>
     <select v-model="shield.ordinary">
         <option value="">Random</option>
@@ -81,7 +82,7 @@
             shield: {
                 foreground: 'ffdc0a',
                 background: '000000',
-                fieldType: '',
+                fieldType: 'charge',
                 ordinary: '',
                 party: '',
             }

@@ -19,6 +19,7 @@ class HeaterShield extends Shield
 
         $heraldicOrdinaryGenerator = new HeraldicOrdinaryGenerator();
         $heraldicPartyGenerator = new HeraldicPartyGenerator();
+        $heraldicChargeGenerator = new HeraldicChargeGenerator();
 
         $image = new SVG($size, $size);
         $doc = $image->getDocument();
@@ -87,7 +88,7 @@ class HeaterShield extends Shield
         } else if ($fieldTypeRoll <= 90) {
             $fieldType = 'party';
         } else {
-            $fieldType = 'blank';
+            $fieldType = 'charge';
         }
         $fieldType = !empty($params['fieldType']) ? $params['fieldType'] : $fieldType;
 
@@ -125,6 +126,24 @@ class HeaterShield extends Shield
                         $paths->setStyle('stroke', $foreground);
                     }
                     $paths->setAttribute('clip-path', 'url(#outline)');
+                    $doc->addChild($paths);
+                }
+                break;
+            case 'charge':
+                $party = $heraldicChargeGenerator->random($params);
+                if (is_array($party) === false) {
+                    $party = [$party];
+                }
+                foreach ($party as $paths) {
+                    $fill = $paths->getStyle('fill');
+                    $paths->setStyle(
+                        'fill',
+                        ($fill ?? $foreground)
+                    );
+                    if ($paths->getStyle('stroke-width') !== null) {
+                        $paths->setStyle('stroke', $foreground);
+                    }
+                    //$paths->setAttribute('clip-path', 'url(#outline)');
                     $doc->addChild($paths);
                 }
                 break;
