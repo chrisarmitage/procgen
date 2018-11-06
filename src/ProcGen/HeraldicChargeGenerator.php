@@ -2,6 +2,7 @@
 
 namespace ProcGen;
 
+use SVG\Nodes\Shapes\SVGLine;
 use SVG\Nodes\Shapes\SVGPolygon;
 use SVG\Nodes\SVGNode;
 
@@ -17,6 +18,7 @@ class HeraldicChargeGenerator
     {
         $methods = [
             'lozenge',
+            'mascle',
         ];
 
         $method = $methods[mt_rand(0, count($methods) - 1)];
@@ -96,6 +98,91 @@ class HeraldicChargeGenerator
     }
 
     protected function generateLozenge($x, $y, $s)
+    {
+        return [
+            [ (-3 * $s) + $x, ( 0 * $s) + $y],
+            [ ( 0 * $s) + $x, (-4 * $s) + $y],
+            [ ( 3 * $s) + $x, ( 0 * $s) + $y],
+            [ ( 0 * $s) + $x, ( 4 * $s) + $y],
+        ];
+    }
+
+
+    /**
+     * @return SVGNode[]
+     */
+    public function mascle()
+    {
+        $number = [
+            '1',
+            '3',
+            '5',
+            '6',
+        ];
+        $count = $number[mt_rand(0, count($number) - 1)];
+        $count = !empty($params['chargeCount']) ? $params['chargeCount'] : $count;
+
+        $polygons = [];
+
+        switch ($count) {
+            case '1':
+                $polygons[] = (new SVGPolygon(
+                    $this->generatePoints($this->generateLozenge(0, 0, 1))
+                ))->setStyle('fill', 'none')
+                    ->setStyle('stroke-width', ($this->unitSize * 0.75) . 'px');
+                break;
+            case '3':
+                $points = [
+                    [  0,  3],
+                    [ -2.5, -2],
+                    [  2.5, -2],
+                ];
+                foreach ($points as $point) {
+                    $polygons[] = (new SVGPolygon(
+                        $this->generatePoints($this->generateLozenge($point[0], $point[1], 0.5))
+                    ))->setStyle('fill', 'none')
+                        ->setStyle('stroke-width', ($this->unitSize * 0.75 * 0.5) . 'px');
+                }
+                break;
+            case '5':
+                $points = [
+                    [  0,  4],
+                    [ -2.5,  0.5],
+                    [ -2.5, -3],
+                    [  2.5,  0.5],
+                    [  2.5, -3],
+                ];
+                foreach ($points as $point) {
+                    $polygons[] = (new SVGPolygon(
+                        $this->generatePoints($this->generateLozenge($point[0], $point[1], 0.3))
+                    ))->setStyle('fill', 'none')
+                        ->setStyle('stroke-width', ($this->unitSize * 0.75 * 0.3) . 'px');
+                }
+                break;
+            case '6':
+                $points = [
+                    [ -3.0, -3],
+                    [  0.0, -3],
+                    [  3.0, -3],
+
+                    [ -1.5,  0.5],
+                    [  1.5,  0.5],
+
+                    [  0,  4],
+                ];
+                foreach ($points as $point) {
+                    $polygons[] = (new SVGPolygon(
+                        $this->generatePoints($this->generateLozenge($point[0], $point[1], 0.3))
+                    ))->setStyle('fill', 'none')
+                        ->setStyle('stroke-width', ($this->unitSize * 0.75 * 0.3) . 'px');
+                }
+                break;
+        }
+
+        return $polygons;
+    }
+
+    protected function generateMascle($x, $y, $s)
     {
         return [
             [ (-3 * $s) + $x, ( 0 * $s) + $y],
