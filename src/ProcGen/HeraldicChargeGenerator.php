@@ -19,6 +19,7 @@ class HeraldicChargeGenerator
         $methods = [
             'lozenge',
             'mascle',
+            'malteseCross',
         ];
 
         $method = $methods[mt_rand(0, count($methods) - 1)];
@@ -189,6 +190,104 @@ class HeraldicChargeGenerator
             [ ( 0 * $s) + $x, (-4 * $s) + $y],
             [ ( 3 * $s) + $x, ( 0 * $s) + $y],
             [ ( 0 * $s) + $x, ( 4 * $s) + $y],
+        ];
+    }
+
+
+
+    /**
+     * @return SVGNode[]
+     */
+    public function malteseCross()
+    {
+        $number = [
+            '1',
+            '3',
+            '5',
+            '6',
+        ];
+        $count = $number[mt_rand(0, count($number) - 1)];
+        $count = !empty($params['chargeCount']) ? $params['chargeCount'] : $count;
+
+        $polygons = [];
+
+        switch ($count) {
+            case '1':
+                $polygons[] = new SVGPolygon(
+                    $this->generatePoints($this->generateMalteseCross(0, 0, 1))
+                );
+                break;
+            case '3':
+                $polygons[] = new SVGPolygon(
+                    $this->generatePoints($this->generateMalteseCross(0, 3, 0.5))
+                );
+                $polygons[] = new SVGPolygon(
+                    $this->generatePoints($this->generateMalteseCross(-2.5, -2, 0.5))
+                );
+                $polygons[] = new SVGPolygon(
+                    $this->generatePoints($this->generateMalteseCross(2.5, -2, 0.5))
+                );
+                break;
+            case '5':
+                $points = [
+                    [  0,  4],
+                    [ -2.5,  0.5],
+                    [ -2.5, -3],
+                    [  2.5,  0.5],
+                    [  2.5, -3],
+                ];
+                foreach ($points as $point) {
+                    $polygons[] = new SVGPolygon(
+                        $this->generatePoints($this->generateMalteseCross($point[0], $point[1], 0.3))
+                    );
+                }
+                break;
+            case '6':
+                $points = [
+                    [ -3.0, -3],
+                    [  0.0, -3],
+                    [  3.0, -3],
+
+                    [ -1.5,  0.5],
+                    [  1.5,  0.5],
+
+                    [  0,  4],
+                ];
+                foreach ($points as $point) {
+                    $polygons[] = new SVGPolygon(
+                        $this->generatePoints($this->generateMalteseCross($point[0], $point[1], 0.3))
+                    );
+                }
+                break;
+        }
+
+        return $polygons;
+    }
+
+    protected function generateMalteseCross($x, $y, $s)
+    {
+        return [
+            [ ( 0 * $s) + $x, ( 0 * $s) + $y],
+
+            [ (-2 * $s) + $x, (-4 * $s) + $y],
+            [ ( 0 * $s) + $x, (-3 * $s) + $y],
+            [ ( 2 * $s) + $x, (-4 * $s) + $y],
+            [ ( 0 * $s) + $x, ( 0 * $s) + $y],
+
+            [ ( 4 * $s) + $x, (-2 * $s) + $y],
+            [ ( 3 * $s) + $x, ( 0 * $s) + $y],
+            [ ( 4 * $s) + $x, ( 2 * $s) + $y],
+            [ ( 0 * $s) + $x, ( 0 * $s) + $y],
+
+            [ ( 2 * $s) + $x, ( 4 * $s) + $y],
+            [ ( 0 * $s) + $x, ( 3 * $s) + $y],
+            [ (-2 * $s) + $x, ( 4 * $s) + $y],
+            [ ( 0 * $s) + $x, ( 0 * $s) + $y],
+
+            [ (-4 * $s) + $x, ( 2 * $s) + $y],
+            [ (-3 * $s) + $x, ( 0 * $s) + $y],
+            [ (-4 * $s) + $x, (-2 * $s) + $y],
+            [ ( 0 * $s) + $x, ( 0 * $s) + $y],
         ];
     }
 
