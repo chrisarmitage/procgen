@@ -82,15 +82,21 @@ class HeaterShield extends Shield
             ->setAttribute('clip-path', 'url(#outline)');
         $doc->addChild($back);
 
+        $ordinaryType = null;
+
         $fieldTypeRoll = mt_rand(1, 100);
         if ($fieldTypeRoll <= 45) {
             $fieldType = 'ordinary';
         } else if ($fieldTypeRoll <= 90) {
             $fieldType = 'party';
         } else {
-            $fieldType = 'charge';
+            $fieldType = 'blank';
         }
         $fieldType = !empty($params['fieldType']) ? $params['fieldType'] : $fieldType;
+
+        if ($fieldType === 'blank') {
+            $ordinaryType = 'blank';
+        }
 
         switch ($fieldType) {
             case 'ordinary':
@@ -109,6 +115,10 @@ class HeaterShield extends Shield
                     }
                     $paths->setAttribute('clip-path', 'url(#outline)');
                     $doc->addChild($paths);
+
+                    if ($paths->getAttribute('x-ordinary') !== null) {
+                        $ordinaryType = $paths->getAttribute('x-ordinary');
+                    }
                 }
                 break;
             case 'party':
@@ -129,24 +139,33 @@ class HeaterShield extends Shield
                     $doc->addChild($paths);
                 }
                 break;
-            case 'charge':
-                $party = $heraldicChargeGenerator->random($params);
-                if (is_array($party) === false) {
-                    $party = [$party];
+        }
+
+        $addChargeRoll = mt_rand(1, 100);
+        if ($addChargeRoll <= 50) {
+            $addCharge = 'true';
+        } else {
+            $addCharge = 'false';
+        }
+        $addCharge = !empty($params['addCharge']) ? $params['addCharge'] : $addCharge;
+
+        if ($addCharge === 'true' && $ordinaryType !== null) {
+            $party = $heraldicChargeGenerator->random($params, $ordinaryType);
+            if (is_array($party) === false) {
+                $party = [$party];
+            }
+            foreach ($party as $paths) {
+                $fill = $paths->getStyle('fill');
+                $paths->setStyle(
+                    'fill',
+                    ($fill ?? $foreground)
+                );
+                if ($paths->getStyle('stroke-width') !== null) {
+                    $paths->setStyle('stroke', $foreground);
                 }
-                foreach ($party as $paths) {
-                    $fill = $paths->getStyle('fill');
-                    $paths->setStyle(
-                        'fill',
-                        ($fill ?? $foreground)
-                    );
-                    if ($paths->getStyle('stroke-width') !== null) {
-                        $paths->setStyle('stroke', $foreground);
-                    }
-                    //$paths->setAttribute('clip-path', 'url(#outline)');
-                    $doc->addChild($paths);
-                }
-                break;
+                //$paths->setAttribute('clip-path', 'url(#outline)');
+                $doc->addChild($paths);
+            }
         }
 
         $doc->addChild($outline);

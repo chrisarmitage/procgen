@@ -438,6 +438,7 @@ class HeraldicOrdinaryGenerator
             )
         );
 
+        $polygon->setAttribute('x-ordinary', 'chevron');
         return $polygon;
     }
 

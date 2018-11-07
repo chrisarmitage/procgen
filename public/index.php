@@ -33,7 +33,7 @@
         <option value="">Random</option>
         <option value="ordinary">Ordinary</option>
         <option value="party">Party</option>
-        <option value="charge">Charge</option>
+        <option value="blank">Blank</option>
     </select>
     <select v-model="shield.ordinary">
         <option value="">Random</option>
@@ -63,16 +63,24 @@
         <option value="chevron">Chevron</option>
         <option value="gyronny">Gyronny</option>
     </select>
+    <select v-model="shield.addCharge">
+        <option disabled >Add Charge</option>
+        <option value="">Random</option>
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+    </select>
 
     <div style="clear: both;"></div>
 
     <div v-for="index in 50" :key="index" style="float: left;">
         <img v-bind:src="'./shield.php?id=' + index
-         + '&foreground=' + shield.foreground
-         + '&background=' + shield.background
-         + '&fieldType=' + shield.fieldType
-         + '&ordinary=' + shield.ordinary
-         + '&party=' + shield.party" />
+             + '&foreground=' + shield.foreground
+             + '&background=' + shield.background
+             + '&fieldType=' + shield.fieldType
+             + '&ordinary=' + shield.ordinary
+             + '&party=' + shield.party
+             + '&addCharge=' + shield.addCharge
+            " width="128" height="128" />
     </div>
 </div>
 <script>
@@ -82,9 +90,10 @@
             shield: {
                 foreground: 'ffdc0a',
                 background: '000000',
-                fieldType: 'charge',
-                ordinary: '',
+                fieldType: 'ordinary',
+                ordinary: 'chevron',
                 party: '',
+                addCharge: 'true',
             }
         }
     })

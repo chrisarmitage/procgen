@@ -14,7 +14,7 @@ class HeraldicChargeGenerator
     /**
      * @return SVGNode
      */
-    public function random($params)
+    public function random($params, $ordinaryType)
     {
         $chargeDefinitions = [
             'lozengeDefinition',
@@ -24,12 +24,17 @@ class HeraldicChargeGenerator
         $chargeDefinition = $this->{$chargeDefinitionName}();
         
         $layouts = [
-            'single',
-            'tripleY',
-            'fiveY',
-            'sixY',
+            'blank' => [
+                'single',
+                'tripleY',
+                'fiveY',
+                'sixY',
+            ],
+            'chevron' => [
+                'chevronY',
+            ],
         ];
-        $layout = $layouts[mt_rand(0, count($layouts) - 1)];
+        $layout = $layouts[$ordinaryType][mt_rand(0, count($layouts[$ordinaryType]) - 1)];
         $layout = !empty($params['layout']) ? $params['layout'] : $layout;
 
         return $this->{$layout}($chargeDefinition, $params);
@@ -135,6 +140,24 @@ class HeraldicChargeGenerator
             [  1.5,  0.5],
 
             [  0,  4],
+        ];
+        foreach ($points as $point) {
+            $polygons[] = new SVGPolygon(
+                $this->generatePoints($this->transformCharge($chargeDefinition, $point[0], $point[1], 0.3))
+            );
+        }
+
+        return $polygons;
+    }
+
+    public function chevronY($chargeDefinition, $params)
+    {
+        $polygons = [];
+
+        $points = [
+            [  0,  4.5],
+            [ -3, -3],
+            [  3, -3],
         ];
         foreach ($points as $point) {
             $polygons[] = new SVGPolygon(
