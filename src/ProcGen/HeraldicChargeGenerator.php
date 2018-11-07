@@ -16,98 +16,144 @@ class HeraldicChargeGenerator
      */
     public function random($params)
     {
-        $methods = [
-            'lozenge',
-            'mascle',
-            'malteseCross',
+        $chargeDefinitions = [
+            'lozengeDefinition',
+            'malteseCrossDefinition',
         ];
+        $chargeDefinitionName = $chargeDefinitions[mt_rand(0, count($chargeDefinitions) - 1)];
+        $chargeDefinition = $this->{$chargeDefinitionName}();
+        
+        $layouts = [
+            'single',
+            'tripleY',
+            'fiveY',
+            'sixY',
+        ];
+        $layout = $layouts[mt_rand(0, count($layouts) - 1)];
+        $layout = !empty($params['layout']) ? $params['layout'] : $layout;
 
-        $method = $methods[mt_rand(0, count($methods) - 1)];
-        $method = !empty($params['charge']) ? $params['charge'] : $method;
-
-        return $this->{$method}($params);
+        return $this->{$layout}($chargeDefinition, $params);
     }
 
-
-    /**
-     * @return SVGNode[]
-     */
-    public function lozenge()
+    protected function lozengeDefinition()
     {
-        $number = [
-            '1',
-            '3',
-            '5',
-            '6',
+        return [
+            [ -3,  0],
+            [  0, -4],
+            [  3,  0],
+            [  0,  4],
         ];
-        $count = $number[mt_rand(0, count($number) - 1)];
-        $count = !empty($params['chargeCount']) ? $params['chargeCount'] : $count;
+    }
 
+    protected function malteseCrossDefinition()
+    {
+        return [
+            [  0,  0],
+
+            [ -2, -4],
+            [  0, -3],
+            [  2, -4],
+            [  0,  0],
+
+            [  4, -2],
+            [  3,  0],
+            [  4,  2],
+            [  0,  0],
+
+            [  2,  4],
+            [  0,  3],
+            [ -2,  4],
+            [  0,  0],
+
+            [ -4,  2],
+            [ -3,  0],
+            [ -4, -2],
+            [  0,  0],
+        ];
+    }
+
+    public function single($chargeDefinition, $params)
+    {
         $polygons = [];
 
-        switch ($count) {
-            case '1':
-                $polygons[] = new SVGPolygon(
-                    $this->generatePoints($this->generateLozenge(0, 0, 1))
-                );
-                break;
-            case '3':
-                $polygons[] = new SVGPolygon(
-                    $this->generatePoints($this->generateLozenge(0, 3, 0.5))
-                );
-                $polygons[] = new SVGPolygon(
-                    $this->generatePoints($this->generateLozenge(-2.5, -2, 0.5))
-                );
-                $polygons[] = new SVGPolygon(
-                    $this->generatePoints($this->generateLozenge(2.5, -2, 0.5))
-                );
-                break;
-            case '5':
-                $points = [
-                    [  0,  4],
-                    [ -2.5,  0.5],
-                    [ -2.5, -3],
-                    [  2.5,  0.5],
-                    [  2.5, -3],
-                ];
-                foreach ($points as $point) {
-                    $polygons[] = new SVGPolygon(
-                        $this->generatePoints($this->generateLozenge($point[0], $point[1], 0.3))
-                    );
-                }
-                break;
-            case '6':
-                $points = [
-                    [ -3.0, -3],
-                    [  0.0, -3],
-                    [  3.0, -3],
+        $polygons[] = (new SVGPolygon(
+            $this->generatePoints($this->transformCharge($chargeDefinition, 0, 0, 1))
+        ))->setAttribute('name', 'charge');
 
-                    [ -1.5,  0.5],
-                    [  1.5,  0.5],
 
-                    [  0,  4],
-                ];
-                foreach ($points as $point) {
-                    $polygons[] = new SVGPolygon(
-                        $this->generatePoints($this->generateLozenge($point[0], $point[1], 0.3))
-                    );
-                }
-                break;
+        return $polygons;
+    }
+
+    public function tripleY($chargeDefinition, $params)
+    {
+        $polygons = [];
+
+        $points = [
+            [  0,  3],
+            [ -2.5, -2],
+            [  2.5, -2],
+        ];
+        foreach ($points as $point) {
+            $polygons[] = new SVGPolygon(
+                $this->generatePoints($this->transformCharge($chargeDefinition, $point[0], $point[1], 0.5))
+            );
         }
 
         return $polygons;
     }
 
-    protected function generateLozenge($x, $y, $s)
+    public function fiveY($chargeDefinition, $params)
     {
-        return [
-            [ (-3 * $s) + $x, ( 0 * $s) + $y],
-            [ ( 0 * $s) + $x, (-4 * $s) + $y],
-            [ ( 3 * $s) + $x, ( 0 * $s) + $y],
-            [ ( 0 * $s) + $x, ( 4 * $s) + $y],
+        $polygons = [];
+
+        $points = [
+            [  0,  4],
+            [ -2.5,  0.5],
+            [ -2.5, -3],
+            [  2.5,  0.5],
+            [  2.5, -3],
         ];
+        foreach ($points as $point) {
+            $polygons[] = new SVGPolygon(
+                $this->generatePoints($this->transformCharge($chargeDefinition, $point[0], $point[1], 0.3))
+            );
+        }
+
+        return $polygons;
     }
 
+    public function sixY($chargeDefinition, $params)
+    {
+        $polygons = [];
+
+        $points = [
+            [ -3.0, -3],
+            [  0.0, -3],
+            [  3.0, -3],
+
+            [ -1.5,  0.5],
+            [  1.5,  0.5],
+
+            [  0,  4],
+        ];
+        foreach ($points as $point) {
+            $polygons[] = new SVGPolygon(
+                $this->generatePoints($this->transformCharge($chargeDefinition, $point[0], $point[1], 0.3))
+            );
+        }
+
+        return $polygons;
+    }
+
+    protected function transformCharge($chargeDefinition, $x, $y, $s)
+    {
+        $transformed = [];
+        foreach ($chargeDefinition as $point) {
+            $transformed[] = [($point[0] * $s) + $x, ( $point[1] * $s) + $y];
+        }
+
+        return $transformed;
+    }
 
     /**
      * @return SVGNode[]
@@ -181,114 +227,6 @@ class HeraldicChargeGenerator
         }
 
         return $polygons;
-    }
-
-    protected function generateMascle($x, $y, $s)
-    {
-        return [
-            [ (-3 * $s) + $x, ( 0 * $s) + $y],
-            [ ( 0 * $s) + $x, (-4 * $s) + $y],
-            [ ( 3 * $s) + $x, ( 0 * $s) + $y],
-            [ ( 0 * $s) + $x, ( 4 * $s) + $y],
-        ];
-    }
-
-
-
-    /**
-     * @return SVGNode[]
-     */
-    public function malteseCross()
-    {
-        $number = [
-            '1',
-            '3',
-            '5',
-            '6',
-        ];
-        $count = $number[mt_rand(0, count($number) - 1)];
-        $count = !empty($params['chargeCount']) ? $params['chargeCount'] : $count;
-
-        $polygons = [];
-
-        switch ($count) {
-            case '1':
-                $polygons[] = new SVGPolygon(
-                    $this->generatePoints($this->generateMalteseCross(0, 0, 1))
-                );
-                break;
-            case '3':
-                $polygons[] = new SVGPolygon(
-                    $this->generatePoints($this->generateMalteseCross(0, 3, 0.5))
-                );
-                $polygons[] = new SVGPolygon(
-                    $this->generatePoints($this->generateMalteseCross(-2.5, -2, 0.5))
-                );
-                $polygons[] = new SVGPolygon(
-                    $this->generatePoints($this->generateMalteseCross(2.5, -2, 0.5))
-                );
-                break;
-            case '5':
-                $points = [
-                    [  0,  4],
-                    [ -2.5,  0.5],
-                    [ -2.5, -3],
-                    [  2.5,  0.5],
-                    [  2.5, -3],
-                ];
-                foreach ($points as $point) {
-                    $polygons[] = new SVGPolygon(
-                        $this->generatePoints($this->generateMalteseCross($point[0], $point[1], 0.3))
-                    );
-                }
-                break;
-            case '6':
-                $points = [
-                    [ -3.0, -3],
-                    [  0.0, -3],
-                    [  3.0, -3],
-
-                    [ -1.5,  0.5],
-                    [  1.5,  0.5],
-
-                    [  0,  4],
-                ];
-                foreach ($points as $point) {
-                    $polygons[] = new SVGPolygon(
-                        $this->generatePoints($this->generateMalteseCross($point[0], $point[1], 0.3))
-                    );
-                }
-                break;
-        }
-
-        return $polygons;
-    }
-
-    protected function generateMalteseCross($x, $y, $s)
-    {
-        return [
-            [ ( 0 * $s) + $x, ( 0 * $s) + $y],
-
-            [ (-2 * $s) + $x, (-4 * $s) + $y],
-            [ ( 0 * $s) + $x, (-3 * $s) + $y],
-            [ ( 2 * $s) + $x, (-4 * $s) + $y],
-            [ ( 0 * $s) + $x, ( 0 * $s) + $y],
-
-            [ ( 4 * $s) + $x, (-2 * $s) + $y],
-            [ ( 3 * $s) + $x, ( 0 * $s) + $y],
-            [ ( 4 * $s) + $x, ( 2 * $s) + $y],
-            [ ( 0 * $s) + $x, ( 0 * $s) + $y],
-
-            [ ( 2 * $s) + $x, ( 4 * $s) + $y],
-            [ ( 0 * $s) + $x, ( 3 * $s) + $y],
-            [ (-2 * $s) + $x, ( 4 * $s) + $y],
-            [ ( 0 * $s) + $x, ( 0 * $s) + $y],
-
-            [ (-4 * $s) + $x, ( 2 * $s) + $y],
-            [ (-3 * $s) + $x, ( 0 * $s) + $y],
-            [ (-4 * $s) + $x, (-2 * $s) + $y],
-            [ ( 0 * $s) + $x, ( 0 * $s) + $y],
-        ];
     }
 
     protected function generatePoints($points)
