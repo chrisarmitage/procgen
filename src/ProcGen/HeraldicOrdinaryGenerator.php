@@ -54,6 +54,7 @@ class HeraldicOrdinaryGenerator
                 [ -8, -6],
             ])
         );
+        $polygon->setAttribute('x-ordinary', 'bend');
 
         return $polygon;
     }
@@ -120,6 +121,7 @@ class HeraldicOrdinaryGenerator
                 ]
             )
         );
+        $polygon->setAttribute('x-ordinary', 'fess');
 
         return $polygon;
     }

@@ -91,7 +91,7 @@
                 foreground: 'ffdc0a',
                 background: '000000',
                 fieldType: 'ordinary',
-                ordinary: 'chevron',
+                ordinary: 'fess',
                 party: '',
                 addCharge: 'true',
             }

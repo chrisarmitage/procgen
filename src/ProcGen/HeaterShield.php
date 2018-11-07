@@ -24,7 +24,7 @@ class HeaterShield extends Shield
         $image = new SVG($size, $size);
         $doc = $image->getDocument();
 
-        $this->drawGrid($doc);
+        // $this->drawGrid($doc);
 
         // Outline
         $path = sprintf('M %d %d', $center + ($unit * -5), $center +  ($unit * -6))
@@ -155,15 +155,22 @@ class HeaterShield extends Shield
                 $party = [$party];
             }
             foreach ($party as $paths) {
-                $fill = $paths->getStyle('fill');
-                $paths->setStyle(
-                    'fill',
-                    ($fill ?? $foreground)
-                );
-                if ($paths->getStyle('stroke-width') !== null) {
-                    $paths->setStyle('stroke', $foreground);
+//                $fill = $paths->getStyle('fill');
+//                $paths->setStyle(
+//                    'fill',
+//                    ($fill ?? $foreground)
+//                );
+//                if ($paths->getStyle('stroke-width') !== null) {
+//                    $paths->setStyle('stroke', $foreground);
+//                }
+
+                $paths->setStyle('fill', $foreground);
+                if ($paths->getAttribute('x-invert') === 'true') {
+                    $paths->setStyle('fill', $background);
                 }
-                //$paths->setAttribute('clip-path', 'url(#outline)');
+
+
+                $paths->setAttribute('clip-path', 'url(#outline)');
                 $doc->addChild($paths);
             }
         }

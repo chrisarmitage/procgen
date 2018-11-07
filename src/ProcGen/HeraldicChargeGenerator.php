@@ -33,6 +33,13 @@ class HeraldicChargeGenerator
             'chevron' => [
                 'chevronY',
             ],
+            'bend' => [
+                'twoBend'
+            ],
+            'fess' => [
+                'fessY',
+                'invertFessHorizontal',
+            ],
         ];
         $layout = $layouts[$ordinaryType][mt_rand(0, count($layouts[$ordinaryType]) - 1)];
         $layout = !empty($params['layout']) ? $params['layout'] : $layout;
@@ -167,6 +174,64 @@ class HeraldicChargeGenerator
 
         return $polygons;
     }
+
+
+    public function twoBend($chargeDefinition, $params)
+    {
+        $polygons = [];
+
+        $points = [
+            [ -2.5,  2.5],
+            [  2.5, -2.5],
+        ];
+        foreach ($points as $point) {
+            $polygons[] = new SVGPolygon(
+                $this->generatePoints($this->transformCharge($chargeDefinition, $point[0], $point[1], 0.3))
+            );
+        }
+
+        return $polygons;
+    }
+
+    public function fessY($chargeDefinition, $params)
+    {
+        $polygons = [];
+
+        $points = [
+            [  0,  4.5],
+            [ -3, -4],
+            [  3, -4],
+        ];
+        foreach ($points as $point) {
+            $polygons[] = new SVGPolygon(
+                $this->generatePoints($this->transformCharge($chargeDefinition, $point[0], $point[1], 0.3))
+            );
+        }
+
+        return $polygons;
+    }
+
+    public function invertFessHorizontal($chargeDefinition, $params)
+    {
+        $polygons = [];
+
+        $points = [
+            [  0,  0],
+            [ -3,  0],
+            [  3,  0],
+        ];
+        foreach ($points as $point) {
+            $polygon = new SVGPolygon(
+                $this->generatePoints($this->transformCharge($chargeDefinition, $point[0], $point[1], 0.3))
+            );
+            $polygon->setAttribute('x-invert', 'true');
+
+            $polygons[] = $polygon;
+        }
+
+        return $polygons;
+    }
+
 
     protected function transformCharge($chargeDefinition, $x, $y, $s)
     {
