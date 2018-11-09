@@ -4,6 +4,7 @@ namespace ProcGen;
 
 use SVG\Nodes\Shapes\SVGPath;
 use SVG\Nodes\Shapes\SVGPolygon;
+use SVG\Nodes\Shapes\SVGPolyline;
 use SVG\Nodes\SVGNode;
 
 class HeraldicOrdinaryGenerator
@@ -422,26 +423,209 @@ class HeraldicOrdinaryGenerator
     }
 
     /**
-     * @return SVGNode
+     * @return SVGNode[]
      */
     public function chevron()
     {
-        $polygon = new SVGPolygon(
-            $this->generatePoints(
-                [
-                    [ 0, -2],
-                    [ 8,  6],
-                    [ 6,  8],
-                    [ 0,  2],
-                    [-6,  8],
-                    [-8,  6],
-                    [ 0, -2],
-                ]
+        $polygons = [];
+
+        $types = [
+            'standard',
+            'half',
+            'quarter',
+            'cotised',
+            'double-cotised',
+        ];
+
+        $type = $types[mt_rand(0, count($types) - 1)];
+
+        $path = [
+            [ -8,  8],
+            [  0,  0],
+            [  8,  8],
+        ];
+
+        switch ($type) {
+            case 'standard':
+                $polygon = new SVGPolyline(
+                    $this->generatePoints($path)
+                );
+                $polygon->setAttribute('x-ordinary', 'chevron')
+                    ->setStyle('stroke-width', $this->unitSize * 2)
+                    ->setStyle('fill', 'none');
+
+                $polygons[] = $polygon;
+                break;
+            case 'half':
+                $polygon = new SVGPolyline(
+                    $this->generatePoints($path)
+                );
+                $polygon->setAttribute('x-ordinary', 'chevron')
+                    ->setStyle('stroke-width', $this->unitSize)
+                    ->setStyle('fill', 'none');
+
+                $polygons[] = $polygon;
+                break;
+            case 'quarter':
+                $polygon = new SVGPolyline(
+                    $this->generatePoints($path)
+                );
+                $polygon->setAttribute('x-ordinary', 'chevron')
+                    ->setStyle('stroke-width', $this->unitSize / 2)
+                    ->setStyle('fill', 'none');
+
+                $polygons[] = $polygon;
+                break;
+            case 'cotised':
+                $polygon = new SVGPolyline(
+                    $this->generatePoints($path)
+                );
+                $polygon->setStyle('stroke-width', $this->unitSize * 2)
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('left', 2, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('right', 2, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+                break;
+            case 'double-cotised':
+                $polygon = new SVGPolyline(
+                    $this->generatePoints($path)
+                );
+                $polygon->setStyle('stroke-width', $this->unitSize * 2)
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('left', 2, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('left', 3, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('right', 2, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('right', 3, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+                break;
+        }
+
+        return $polygons;
+    }
+
+    protected function shiftLine($direction, $distance, $points)
+    {
+        $angle = ($direction === 'left' ? -90 : 90);
+        $newPath = [];
+
+        $newPath[] = $this->generateOffsetPoints(array_slice($points, 0, 2), $angle, $distance)[0];
+
+        $newPath[] = $this->generateMitrePoints($points, $angle, $distance);
+
+        $newPath[] = $this->generateOffsetPoints(array_slice($points, -2, 2), $angle, $distance)[1];
+
+        return $newPath;
+    }
+
+    protected function generateOffsetPoints($points, $angle, $distance) {
+        $vectorAngle = rad2deg(
+            atan2(
+                $points[1][1] - $points[0][1],
+                $points[1][0] - $points[0][0]
             )
         );
 
-        $polygon->setAttribute('x-ordinary', 'chevron');
-        return $polygon;
+        $offsetAngle = deg2rad($vectorAngle + $angle);
+
+        $newPoints = [
+            [
+                $points[0][0] + ($distance * (cos($offsetAngle))),
+                $points[0][1] + ($distance * (sin($offsetAngle))),
+            ],
+            [
+                $points[1][0] + ($distance * (cos($offsetAngle))),
+                $points[1][1] + ($distance * (sin($offsetAngle))),
+            ],
+        ];
+
+        return $newPoints;
+    }
+
+    protected function generateMitrePoints($points, $angle, $distance)
+    {
+        $v1 = new \webd\vectors\Vector(
+            $points[1][0] - $points[0][0],
+            $points[1][1] - $points[0][1]
+        );
+        $v2 = new \webd\vectors\Vector(
+            $points[2][0] - $points[1][0],
+            $points[2][1] - $points[1][1]
+        );
+
+        $tangent = $v1->normalize()->add($v2->normalize())->normalize();
+
+        $mitre = new \webd\vectors\Vector(- $tangent->getValue()[1], $tangent->getValue()[0]);
+
+        $normal = (new \webd\vectors\Vector( - $v1->getValue()[1], $v1->getValue()[0]))->normalize();
+
+        $dLength = $distance / $mitre->dotProduct($normal);
+
+        if ($angle < 0) {
+            $p = [
+                $points[1][0] - ($dLength * $mitre->getValue()[0]),
+                $points[1][1] - ($dLength * $mitre->getValue()[1]),
+            ];
+        } else {
+            $p = [
+                $points[1][0] + ($dLength * $mitre->getValue()[0]),
+                $points[1][1] + ($dLength * $mitre->getValue()[1]),
+            ];
+
+        }
+        return $p;
     }
 
     protected function generatePoints($points)

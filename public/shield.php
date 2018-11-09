@@ -3,6 +3,9 @@
 use ProcGen\HeaterShield;
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/vector-lib.php';
+
+ini_set('display_errors', 1);
 
 $id = isset($_GET['id']) ? $_GET['id'] : 0;
 
