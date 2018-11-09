@@ -5,6 +5,7 @@
 </head>
 <body>
 <div id="app">
+    <button v-on:click="shield.refresh += 1">Refresh</button>
     <select v-model="shield.foreground">
         <option value="">Random</option>
         <option disabled >Metals</option>
@@ -73,7 +74,9 @@
     <div style="clear: both;"></div>
 
     <div v-for="index in 50" :key="index" style="float: left;">
-        <img v-bind:src="'./shield.php?id=' + index
+        <img v-bind:src="'./shield.php?'
+             + 'refresh=' + shield.refresh
+             + '&id=' + index
              + '&foreground=' + shield.foreground
              + '&background=' + shield.background
              + '&fieldType=' + shield.fieldType
@@ -88,13 +91,14 @@
         el: '#app',
         data: {
             shield: {
-                foreground: 'ffdc0a',
-                background: '000000',
-                fieldType: 'ordinary',
-                ordinary: 'fess',
+                refresh: 1,
+                foreground: '',
+                background: '',
+                fieldType: '',
+                ordinary: '',
                 party: '',
-                addCharge: 'true',
-            }
+                addCharge: '',
+            },
         }
     })
 </script>
