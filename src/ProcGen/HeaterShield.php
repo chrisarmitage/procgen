@@ -20,6 +20,7 @@ class HeaterShield extends Shield
         $heraldicOrdinaryGenerator = new HeraldicOrdinaryGenerator();
         $heraldicPartyGenerator = new HeraldicPartyGenerator();
         $heraldicChargeGenerator = new HeraldicChargeGenerator();
+        $heraldicChargeExternalGenerator = new HeraldicChargeExternalGenerator();
 
         $image = new SVG($size, $size);
         $doc = $image->getDocument();
@@ -150,28 +151,36 @@ class HeaterShield extends Shield
         $addCharge = !empty($params['addCharge']) ? $params['addCharge'] : $addCharge;
 
         if ($addCharge === 'true' && $ordinaryType !== null) {
-            $party = $heraldicChargeGenerator->random($params, $ordinaryType);
-            if (is_array($party) === false) {
-                $party = [$party];
-            }
-            foreach ($party as $paths) {
-//                $fill = $paths->getStyle('fill');
-//                $paths->setStyle(
-//                    'fill',
-//                    ($fill ?? $foreground)
-//                );
-//                if ($paths->getStyle('stroke-width') !== null) {
-//                    $paths->setStyle('stroke', $foreground);
-//                }
 
-                $paths->setStyle('fill', $foreground);
-                if ($paths->getAttribute('x-invert') === 'true') {
-                    $paths->setStyle('fill', $background);
+            if (mt_rand(1, 2) === 1) {
+                $party = $heraldicChargeGenerator->random($params, $ordinaryType);
+                if (is_array($party) === false) {
+                    $party = [$party];
                 }
+                foreach ($party as $paths) {
+    //                $fill = $paths->getStyle('fill');
+    //                $paths->setStyle(
+    //                    'fill',
+    //                    ($fill ?? $foreground)
+    //                );
+    //                if ($paths->getStyle('stroke-width') !== null) {
+    //                    $paths->setStyle('stroke', $foreground);
+    //                }
+
+                    $paths->setStyle('fill', $foreground);
+                    if ($paths->getAttribute('x-invert') === 'true') {
+                        $paths->setStyle('fill', $background);
+                    }
 
 
-                $paths->setAttribute('clip-path', 'url(#outline)');
-                $doc->addChild($paths);
+                    $paths->setAttribute('clip-path', 'url(#outline)');
+                    $doc->addChild($paths);
+                }
+            } else {
+                $charges = $heraldicChargeExternalGenerator->random($params, $ordinaryType);
+                foreach ($charges as $charge) {
+                    $doc->addChild($charge);
+                }
             }
         }
 
