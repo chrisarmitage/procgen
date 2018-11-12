@@ -28,6 +28,9 @@ class HeraldicChargeExternalGenerator
             'chevron' => [
                 'chevronY',
             ],
+            'fess' => [
+                'single',
+            ],
         ];
         $layout = $layouts[$ordinaryType][mt_rand(0, count($layouts[$ordinaryType]) - 1)];
         $layout = !empty($params['layout']) ? $params['layout'] : $layout;
