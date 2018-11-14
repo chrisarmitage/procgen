@@ -18,7 +18,7 @@ class HeaterShield extends Shield
         $center = $this->size / 2;
 
         $heraldicOrdinaryGenerator = new HeraldicOrdinaryGenerator($this->size, $this->unitSize, $params);
-        $heraldicPartyGenerator = new HeraldicPartyGenerator();
+        $heraldicPartyGenerator = new HeraldicPartyGenerator($this->size, $this->unitSize, $params);
         $heraldicChargeGenerator = new HeraldicChargeGenerator();
         $heraldicChargeExternalGenerator = new HeraldicChargeExternalGenerator($this->size, $this->unitSize, $params);
 
