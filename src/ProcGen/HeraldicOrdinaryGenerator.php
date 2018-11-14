@@ -12,11 +12,14 @@ class HeraldicOrdinaryGenerator
     protected $size = 128;
     protected $unitSize = 8;
 
+    protected $params;
+
     /**
      * @return SVGNode
      */
     public function random($params)
     {
+        $this->params = $params;
         $methods = [
             'bend',
             'cross',
@@ -438,6 +441,7 @@ class HeraldicOrdinaryGenerator
         ];
 
         $type = $types[mt_rand(0, count($types) - 1)];
+        $type = !empty($this->params['variation']) ? $this->params['variation'] : $type;
 
         $path = [
             [ -8,  8],
