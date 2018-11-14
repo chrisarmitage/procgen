@@ -5,13 +5,16 @@
 <body>
 <?php
 
-$ordinaries = [
+$ordinariesWithVariations = [
     'bend',
     'cross',
     'pale',
     'fess',
     'saltire',
     'chevron',
+];
+
+$ordinariesWithoutVariations = [
     'chief',
     'paly',
     'barry',
@@ -45,7 +48,7 @@ $parties = [
 
 $queryStrings = [];
 $fieldType = 'ordinary';
-foreach ($ordinaries as $ordinary) {
+foreach ($ordinariesWithVariations as $ordinary) {
     foreach ($variations as $variation) {
         $queryStrings["FieldType: {$fieldType}\nOrdinary: {$ordinary}\nVariation: {$variation}"] = http_build_query(
             [
@@ -72,6 +75,36 @@ foreach ($ordinaries as $ordinary) {
 </div>
 
 <hr />
+
+<?php
+
+$queryStrings = [];
+$fieldType = 'ordinary';
+foreach ($ordinariesWithoutVariations as $ordinary) {
+    $queryStrings["FieldType: {$fieldType}\nOrdinary: {$ordinary}\nVariation: {$variation}"] = http_build_query(
+        [
+            'foreground' => 'ff0000',
+            'background' => 'f0f0f0',
+            'fieldType'  => $fieldType,
+            'ordinary'   => $ordinary,
+            'addCharge' => 'false',
+        ]
+    );
+    //$queryStrings[] = null;
+}
+?>
+<div>
+    <?php foreach ($queryStrings as $key => $queryString) : ?>
+    <?php if ($queryString === null) : ?>
+</div><div>
+    <?php else : ?>
+        <img src="shield.php?<?= $queryString; ?>" width="128" height="128" title="<?= $key; ?>"/>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</div>
+
+<hr />
+?>
 
 <?php
 $queryStrings = [];
