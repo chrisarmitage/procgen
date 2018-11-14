@@ -20,7 +20,7 @@ class HeaterShield extends Shield
         $heraldicOrdinaryGenerator = new HeraldicOrdinaryGenerator($this->size, $this->unitSize, $params);
         $heraldicPartyGenerator = new HeraldicPartyGenerator();
         $heraldicChargeGenerator = new HeraldicChargeGenerator();
-        $heraldicChargeExternalGenerator = new HeraldicChargeExternalGenerator();
+        $heraldicChargeExternalGenerator = new HeraldicChargeExternalGenerator($this->size, $this->unitSize, $params);
 
         $image = new SVG($this->size, $this->size);
         $doc = $image->getDocument();

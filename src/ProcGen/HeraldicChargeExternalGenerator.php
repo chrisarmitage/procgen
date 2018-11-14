@@ -11,6 +11,21 @@ class HeraldicChargeExternalGenerator
     protected $size = 128;
     protected $unitSize = 8;
 
+    protected $params;
+
+    /**
+     * HeraldicOrdinaryGenerator constructor.
+     * @param int $size
+     * @param int $unitSize
+     * @param     $params
+     */
+    public function __construct(int $size, int $unitSize, $params)
+    {
+        $this->size = $size;
+        $this->unitSize = $unitSize;
+        $this->params = $params;
+    }
+
     /**
      * @return SVGNode
      */
