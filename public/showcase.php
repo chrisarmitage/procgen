@@ -29,6 +29,8 @@ $variations = [
     'quarter',
     'cotised',
     'double-cotised',
+    'twin',
+    'triple',
 ];
 
 $parties = [

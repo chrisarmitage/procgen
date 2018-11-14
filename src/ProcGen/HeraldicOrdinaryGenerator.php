@@ -71,6 +71,8 @@ class HeraldicOrdinaryGenerator
             'quarter',
             'cotised',
             'double-cotised',
+            'twin',
+            'triple',
         ];
 
         $type = $types[mt_rand(0, count($types) - 1)];
@@ -100,6 +102,13 @@ class HeraldicOrdinaryGenerator
                 $polygons = array_merge($polygons, $this->generateStandardWidthFromPath($path, $ordinaryName));
                 $polygons = array_merge($polygons, $this->generateDoubleCotisePairFromPath($path, $ordinaryName));
                 break;
+            case 'twin':
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 0.5));
+                break;
+            case 'triple':
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 0));
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 1));
+                break;
         }
 
         return $polygons;
@@ -119,6 +128,8 @@ class HeraldicOrdinaryGenerator
             'quarter',
             'cotised',
             'double-cotised',
+            'twin',
+            'triple',
         ];
 
         $type = $types[mt_rand(0, count($types) - 1)];
@@ -168,6 +179,13 @@ class HeraldicOrdinaryGenerator
                     $polygons = array_merge($polygons, $this->generateStandardWidthFromPath($path, $ordinaryName));
                     $polygons = array_merge($polygons, $this->generateDoubleCotiseLeftFromPath($path, $ordinaryName));
                     break;
+                case 'twin':
+                    $polygons = array_merge($polygons, $this->generateSingleCotiseLeftFromPath($path, $ordinaryName, 0.5));
+                    break;
+                case 'triple':
+                    $polygons = array_merge($polygons, $this->generateSingleCotiseLeftFromPath($path, $ordinaryName, 0));
+                    $polygons = array_merge($polygons, $this->generateSingleCotiseLeftFromPath($path, $ordinaryName, 1));
+                    break;
             }
         }
 
@@ -187,6 +205,8 @@ class HeraldicOrdinaryGenerator
             'quarter',
             'cotised',
             'double-cotised',
+            'twin',
+            'triple',
         ];
 
         $type = $types[mt_rand(0, count($types) - 1)];
@@ -216,6 +236,13 @@ class HeraldicOrdinaryGenerator
                 $polygons = array_merge($polygons, $this->generateStandardWidthFromPath($path, $ordinaryName));
                 $polygons = array_merge($polygons, $this->generateDoubleCotisePairFromPath($path, $ordinaryName));
                 break;
+            case 'twin':
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 0.5));
+                break;
+            case 'triple':
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 0));
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 1));
+                break;
         }
 
         return $polygons;
@@ -234,6 +261,8 @@ class HeraldicOrdinaryGenerator
             'quarter',
             'cotised',
             'double-cotised',
+            'twin',
+            'triple',
         ];
 
         $type = $types[mt_rand(0, count($types) - 1)];
@@ -263,6 +292,13 @@ class HeraldicOrdinaryGenerator
                 $polygons = array_merge($polygons, $this->generateStandardWidthFromPath($path, $ordinaryName));
                 $polygons = array_merge($polygons, $this->generateDoubleCotisePairFromPath($path, $ordinaryName));
                 break;
+            case 'twin':
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 0.5));
+                break;
+            case 'triple':
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 0));
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 1));
+                break;
         }
 
         return $polygons;
@@ -281,6 +317,8 @@ class HeraldicOrdinaryGenerator
             'quarter',
             'cotised',
             'double-cotised',
+            'twin',
+            'triple',
         ];
 
         $type = $types[mt_rand(0, count($types) - 1)];
@@ -331,6 +369,13 @@ class HeraldicOrdinaryGenerator
                 case 'double-cotised':
                     $polygons = array_merge($polygons, $this->generateStandardWidthFromPath($path, $ordinaryName));
                     $polygons = array_merge($polygons, $this->generateDoubleCotiseLeftFromPath($path, $ordinaryName));
+                    break;
+                case 'twin':
+                    $polygons = array_merge($polygons, $this->generateSingleCotiseLeftFromPath($path, $ordinaryName, 0.5));
+                    break;
+                case 'triple':
+                    $polygons = array_merge($polygons, $this->generateSingleCotiseLeftFromPath($path, $ordinaryName, 0));
+                    $polygons = array_merge($polygons, $this->generateSingleCotiseLeftFromPath($path, $ordinaryName, 1));
                     break;
             }
         }
@@ -618,6 +663,8 @@ class HeraldicOrdinaryGenerator
             'quarter',
             'cotised',
             'double-cotised',
+            'twin',
+            'triple',
         ];
 
         $type = $types[mt_rand(0, count($types) - 1)];
@@ -648,6 +695,13 @@ class HeraldicOrdinaryGenerator
             case 'double-cotised':
                 $polygons = array_merge($polygons, $this->generateStandardWidthFromPath($path, $ordinaryName));
                 $polygons = array_merge($polygons, $this->generateDoubleCotisePairFromPath($path, $ordinaryName));
+                break;
+            case 'twin':
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 0.5));
+                break;
+            case 'triple':
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 0));
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 1));
                 break;
         }
 
