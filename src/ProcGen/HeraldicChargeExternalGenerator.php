@@ -30,7 +30,7 @@ class HeraldicChargeExternalGenerator
                 'chevronY',
             ],
             'fess' => [
-                'single',
+                'fessHorizontal',
             ],
         ];
         $layout = $layouts[$ordinaryType][mt_rand(0, count($layouts[$ordinaryType]) - 1)];
@@ -136,6 +136,38 @@ class HeraldicChargeExternalGenerator
         $nestedSvg->setAttribute('x', (($this->size - $roseSize) / 2) + (3 * $this->unitSize));
         $nestedSvg->setAttribute('y', (($this->size - $roseSize) / 2) + (-3 * $this->unitSize));
         $polygons[] = $nestedSvg;
+
+        return $polygons;
+    }
+
+    public function fessHorizontal($file, $params)
+    {
+        $polygons = [];
+
+
+        $svgRose = SVG::fromFile(__DIR__ . '/../../svg/' . $file . '.svg');
+        $svgDocument = $svgRose->getDocument();
+        $viewBox = $svgDocument->getAttribute('viewBox');
+        $rose = $svgDocument->getChild(0);
+
+        $roseSize = 128 / 6;
+        $nestedSvg = new SVGDocumentFragment($roseSize, $roseSize);
+        $nestedSvg->addChild($rose);
+        $nestedSvg->setAttribute('viewBox', $viewBox);
+        $nestedSvg->setAttribute('x', ($this->size - $roseSize) / 2);
+        $nestedSvg->setAttribute('y', (($this->size - $roseSize) / 2));
+        $nestedSvg->setAttribute('id', 'white-rose');
+        $polygons[] = $nestedSvg;
+
+        $copy = new SVGGenericNodeType('use');
+        $copy->setAttribute('xlink:href', '#white-rose')
+            ->setAttribute('transform', 'translate(' . (-3 * $this->unitSize) . ', ' . (0 * $this->unitSize) . ')');
+        $polygons[] = $copy;
+
+        $copy = new SVGGenericNodeType('use');
+        $copy->setAttribute('xlink:href', '#white-rose')
+            ->setAttribute('transform', 'translate(' . (3 * $this->unitSize) . ', ' . (0 * $this->unitSize) . ')');
+        $polygons[] = $copy;
 
         return $polygons;
     }
