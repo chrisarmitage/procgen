@@ -343,79 +343,12 @@ class HeraldicOrdinaryGenerator
                 $polygons = array_merge($polygons, $this->generateQuarterWidthFromPath($path, $ordinaryName));
                 break;
             case 'cotised':
-                $polygon = new SVGPolyline(
-                    $this->generatePoints($path)
-                );
-                $polygon->setStyle('stroke-width', $this->unitSize * 2.5)
-                    ->setStyle('fill', 'none');
-                $polygons[] = $polygon;
-
-
-                $polygon = new SVGPolyline(
-                    $this->generatePoints(
-                        $this->shiftLine('left', 2, $path)
-                    )
-                );
-                $polygon->setStyle('stroke-width', $this->unitSize * .5)
-                    ->setStyle('fill', 'none');
-                $polygons[] = $polygon;
-
-                $polygon = new SVGPolyline(
-                    $this->generatePoints(
-                        $this->shiftLine('right', 2, $path)
-                    )
-                );
-                $polygon->setStyle('stroke-width', $this->unitSize * 0.5)
-                    ->setStyle('fill', 'none');
-                $polygons[] = $polygon;
-
+                $polygons = array_merge($polygons, $this->generateStandardWidthFromPath($path, $ordinaryName));
+                $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName));
                 break;
             case 'double-cotised':
-                $polygon = new SVGPolyline(
-                    $this->generatePoints($path)
-                );
-                $polygon->setStyle('stroke-width', $this->unitSize * 2.5)
-                    ->setStyle('fill', 'none');
-                $polygons[] = $polygon;
-
-
-                $polygon = new SVGPolyline(
-                    $this->generatePoints(
-                        $this->shiftLine('left', 2, $path)
-                    )
-                );
-                $polygon->setStyle('stroke-width', $this->unitSize * 0.5)
-                    ->setStyle('fill', 'none');
-                $polygons[] = $polygon;
-
-
-                $polygon = new SVGPolyline(
-                    $this->generatePoints(
-                        $this->shiftLine('left', 3, $path)
-                    )
-                );
-                $polygon->setStyle('stroke-width', $this->unitSize * 0.5)
-                    ->setStyle('fill', 'none');
-                $polygons[] = $polygon;
-
-                $polygon = new SVGPolyline(
-                    $this->generatePoints(
-                        $this->shiftLine('right', 2, $path)
-                    )
-                );
-                $polygon->setStyle('stroke-width', $this->unitSize * 0.5)
-                    ->setStyle('fill', 'none');
-                $polygons[] = $polygon;
-
-                $polygon = new SVGPolyline(
-                    $this->generatePoints(
-                        $this->shiftLine('right', 3, $path)
-                    )
-                );
-                $polygon->setStyle('stroke-width', $this->unitSize * 0.5)
-                    ->setStyle('fill', 'none');
-                $polygons[] = $polygon;
-
+                $polygons = array_merge($polygons, $this->generateStandardWidthFromPath($path, $ordinaryName));
+                $polygons = array_merge($polygons, $this->generateDoubleCotisePairFromPath($path, $ordinaryName));
                 break;
         }
 
@@ -1188,6 +1121,41 @@ class HeraldicOrdinaryGenerator
             ->setStyle('fill', 'none');
 
         $polygons[] = $polygon;
+
+        return $polygons;
+    }
+
+    protected function generateSingleCotisePairFromPath($path, $ordinaryName, $distance = 2)
+    {
+        $polygons = [];
+
+        $polygon = new SVGPolyline(
+            $this->generatePoints(
+                $this->shiftLine('left', $distance, $path)
+            )
+        );
+        $polygon->setStyle('stroke-width', $this->unitSize * 0.5)
+            ->setStyle('fill', 'none');
+        $polygons[] = $polygon;
+
+        $polygon = new SVGPolyline(
+            $this->generatePoints(
+                $this->shiftLine('right', $distance, $path)
+            )
+        );
+        $polygon->setStyle('stroke-width', $this->unitSize * 0.5)
+            ->setStyle('fill', 'none');
+        $polygons[] = $polygon;
+
+        return $polygons;
+    }
+
+    protected function generateDoubleCotisePairFromPath($path, $ordinaryName)
+    {
+        $polygons = [];
+
+        $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName));
+        $polygons = array_merge($polygons, $this->generateSingleCotisePairFromPath($path, $ordinaryName, 2.75));
 
         return $polygons;
     }
