@@ -7,17 +7,19 @@ use SVG\Nodes\Structures\SVGDocumentFragment;
 
 abstract class Shield
 {
+    protected $size;
+    protected $unitSize;
+
     protected function drawGrid(SVGDocumentFragment $doc)
     {
-        $size = 128;
-        $unitSize = 8 * 2;
-        for ($y = 0; $y <= $size; $y += $unitSize) {
-            $line = new SVGLine($y, 0, $y, $size);
+
+        for ($y = 0; $y <= $this->size; $y += $this->unitSize) {
+            $line = new SVGLine($y, 0, $y, $this->size);
             $line->setStyle('stroke', '#cccccc');
             $doc->addChild($line);
         }
-        for ($x = 0; $x <= $size; $x += $unitSize) {
-            $line = new SVGLine(0, $x, $size, $x);
+        for ($x = 0; $x <= $this->size; $x += $this->unitSize) {
+            $line = new SVGLine(0, $x, $this->size, $x);
             $line->setStyle('stroke', '#cccccc');
             $doc->addChild($line);
         }

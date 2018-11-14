@@ -13,28 +13,28 @@ class HeaterShield extends Shield
     public function generate($seed, $params)
     {
         mt_srand($seed);
-        $size = 128;
-        $unit = $size / 16;
-        $center = $size / 2;
+        $this->size = 128 * 4;
+        $this->unitSize = $this->size / 16;
+        $center = $this->size / 2;
 
-        $heraldicOrdinaryGenerator = new HeraldicOrdinaryGenerator();
+        $heraldicOrdinaryGenerator = new HeraldicOrdinaryGenerator($this->size, $this->unitSize, $params);
         $heraldicPartyGenerator = new HeraldicPartyGenerator();
         $heraldicChargeGenerator = new HeraldicChargeGenerator();
         $heraldicChargeExternalGenerator = new HeraldicChargeExternalGenerator();
 
-        $image = new SVG($size, $size);
+        $image = new SVG($this->size, $this->size);
         $doc = $image->getDocument();
 
         $this->drawGrid($doc);
 
         // Outline
-        $path = sprintf('M %d %d', $center + ($unit * -5), $center +  ($unit * -6))
-            . sprintf( ' L %d %d', $center + ($unit * 6), $center +  ($unit * -6))
-            . sprintf( ' L %d %d', $center + ($unit * 6), $center +  ($unit * -2))
-            . sprintf( ' A %d %d 0 0 1 %d %d', $unit * 16, $unit * 16, $center + ($unit * 0), $center +  ($unit * 8))
-            . sprintf( ' A %d %d 0 0 1 %d %d', $unit * 16, $unit * 16, $center + ($unit * -6), $center +  ($unit * -2))
-            . sprintf( ' L %d %d', $center + ($unit * -6), $center +  ($unit * -6))
-            . sprintf( ' L %d %d', $center + ($unit * -5), $center +  ($unit * -6))
+        $path = sprintf('M %d %d', $center + ($this->unitSize * -5), $center +  ($this->unitSize * -6))
+            . sprintf( ' L %d %d', $center + ($this->unitSize * 6), $center +  ($this->unitSize * -6))
+            . sprintf( ' L %d %d', $center + ($this->unitSize * 6), $center +  ($this->unitSize * -2))
+            . sprintf( ' A %d %d 0 0 1 %d %d', $this->unitSize * 16, $this->unitSize * 16, $center + ($this->unitSize * 0), $center +  ($this->unitSize * 8))
+            . sprintf( ' A %d %d 0 0 1 %d %d', $this->unitSize * 16, $this->unitSize * 16, $center + ($this->unitSize * -6), $center +  ($this->unitSize * -2))
+            . sprintf( ' L %d %d', $center + ($this->unitSize * -6), $center +  ($this->unitSize * -6))
+            . sprintf( ' L %d %d', $center + ($this->unitSize * -5), $center +  ($this->unitSize * -6))
         ;
         $outline = new SVGPath($path);
         $outline->setStyle('stroke', '#434b4d')
@@ -78,7 +78,7 @@ class HeaterShield extends Shield
         $foreground = !empty($params['foreground']) ? '#' . $params['foreground'] : $foreground;
         $background = !empty($params['background']) ? '#' . $params['background'] : $background;
 
-        $back = new SVGRect(0, 0, $size, $size);
+        $back = new SVGRect(0, 0, $this->size, $this->size);
         $back->setStyle('fill', $background)
             ->setAttribute('clip-path', 'url(#outline)');
         $doc->addChild($back);
