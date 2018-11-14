@@ -104,7 +104,6 @@ foreach ($ordinariesWithoutVariations as $ordinary) {
 </div>
 
 <hr />
-?>
 
 <?php
 $queryStrings = [];
