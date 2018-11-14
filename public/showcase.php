@@ -52,6 +52,7 @@ foreach ($ordinaries as $ordinary) {
                 'fieldType'  => $fieldType,
                 'ordinary'   => $ordinary,
                 'variation'  => $variation,
+                'addCharge' => 'false',
             ]
         );
     }

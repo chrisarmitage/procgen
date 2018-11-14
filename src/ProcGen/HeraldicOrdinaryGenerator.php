@@ -45,22 +45,139 @@ class HeraldicOrdinaryGenerator
     }
 
     /**
-     * @return SVGNode
+     * @return SVGNode[]
      */
     public function bend()
     {
-        $polygon = new SVGPolygon(
-            $this->generatePoints(
-            [
-                [ -6, -8],
-                [  8,  6],
-                [  6,  8],
-                [ -8, -6],
-            ])
-        );
-        $polygon->setAttribute('x-ordinary', 'bend');
+        $polygons = [];
 
-        return $polygon;
+        $types = [
+            'standard',
+            'half',
+            'quarter',
+            'cotised',
+            'double-cotised',
+        ];
+
+        $type = $types[mt_rand(0, count($types) - 1)];
+        $type = !empty($this->params['variation']) ? $this->params['variation'] : $type;
+
+        $path = [
+            [ -8, -8],
+            [  8,  8],
+        ];
+
+        $ordinaryName = 'bend';
+        switch ($type) {
+            case 'standard':
+                $polygon = new SVGPolyline(
+                    $this->generatePoints($path)
+                );
+                $polygon->setAttribute('x-ordinary', $ordinaryName)
+                    ->setStyle('stroke-width', $this->unitSize * 2)
+                    ->setStyle('fill', 'none');
+
+                $polygons[] = $polygon;
+                break;
+            case 'half':
+                $polygon = new SVGPolyline(
+                    $this->generatePoints($path)
+                );
+                $polygon->setAttribute('x-ordinary', $ordinaryName)
+                    ->setStyle('stroke-width', $this->unitSize)
+                    ->setStyle('fill', 'none');
+
+                $polygons[] = $polygon;
+                break;
+            case 'quarter':
+                $polygon = new SVGPolyline(
+                    $this->generatePoints($path)
+                );
+                $polygon->setAttribute('x-ordinary', $ordinaryName)
+                    ->setStyle('stroke-width', $this->unitSize / 2)
+                    ->setStyle('fill', 'none');
+
+                $polygons[] = $polygon;
+                break;
+            case 'cotised':
+                $polygon = new SVGPolyline(
+                    $this->generatePoints($path)
+                );
+                $polygon->setStyle('stroke-width', $this->unitSize * 2)
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('left', 2, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('right', 2, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+                break;
+            case 'double-cotised':
+                $polygon = new SVGPolyline(
+                    $this->generatePoints($path)
+                );
+                $polygon->setStyle('stroke-width', $this->unitSize * 2)
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('left', 2, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('left', 3, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('right', 2, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+                $polygon = new SVGPolyline(
+                    $this->generatePoints(
+                        $this->shiftLine('right', 3, $path)
+                    )
+                );
+                $polygon->setStyle('stroke-width', '5')
+                    ->setStyle('fill', 'none');
+                $polygons[] = $polygon;
+
+                break;
+        }
+
+        return $polygons;
+
     }
 
     /**
@@ -567,7 +684,9 @@ class HeraldicOrdinaryGenerator
 
         $newPath[] = $this->generateOffsetPoints(array_slice($points, 0, 2), $angle, $distance)[0];
 
-        $newPath[] = $this->generateMitrePoints($points, $angle, $distance);
+        if (count($points) > 2) {
+            $newPath[] = $this->generateMitrePoints($points, $angle, $distance);
+        }
 
         $newPath[] = $this->generateOffsetPoints(array_slice($points, -2, 2), $angle, $distance)[1];
 
