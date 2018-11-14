@@ -3,6 +3,7 @@
 namespace ProcGen;
 
 use SVG\Nodes\Structures\SVGDocumentFragment;
+use SVG\Nodes\SVGGenericNodeType;
 use SVG\SVG;
 
 class HeraldicChargeExternalGenerator
@@ -73,36 +74,18 @@ class HeraldicChargeExternalGenerator
         $nestedSvg->setAttribute('viewBox', $viewBox);
         $nestedSvg->setAttribute('x', ($this->size - $roseSize) / 2);
         $nestedSvg->setAttribute('y', (($this->size - $roseSize) / 2) + (3 * $this->unitSize));
+        $nestedSvg->setAttribute('id', 'white-rose');
         $polygons[] = $nestedSvg;
 
+        $copy = new SVGGenericNodeType('use');
+        $copy->setAttribute('xlink:href', '#white-rose')
+            ->setAttribute('transform', 'translate(' . (-2.5 * $this->unitSize) . ', ' . (-5 * $this->unitSize) . ')');
+        $polygons[] = $copy;
 
-
-        $svgRose = SVG::fromFile(__DIR__ . '/../../svg/' . $file . '.svg');
-        $svgDocument = $svgRose->getDocument();
-        $viewBox = $svgDocument->getAttribute('viewBox');
-        $rose = $svgDocument->getChild(0);
-
-        $roseSize = 128 / 4;
-        $nestedSvg = new SVGDocumentFragment($roseSize, $roseSize);
-        $nestedSvg->addChild($rose);
-        $nestedSvg->setAttribute('viewBox', $viewBox);
-        $nestedSvg->setAttribute('x', (($this->size - $roseSize) / 2) + (-2.5 * $this->unitSize));
-        $nestedSvg->setAttribute('y', (($this->size - $roseSize) / 2) + (-2 * $this->unitSize));
-        $polygons[] = $nestedSvg;
-
-
-        $svgRose = SVG::fromFile(__DIR__ . '/../../svg/' . $file . '.svg');
-        $svgDocument = $svgRose->getDocument();
-        $viewBox = $svgDocument->getAttribute('viewBox');
-        $rose = $svgDocument->getChild(0);
-
-        $roseSize = 128 / 4;
-        $nestedSvg = new SVGDocumentFragment($roseSize, $roseSize);
-        $nestedSvg->addChild($rose);
-        $nestedSvg->setAttribute('viewBox', $viewBox);
-        $nestedSvg->setAttribute('x', (($this->size - $roseSize) / 2) + (2.5 * $this->unitSize));
-        $nestedSvg->setAttribute('y', (($this->size - $roseSize) / 2) + (-2 * $this->unitSize));
-        $polygons[] = $nestedSvg;
+        $copy = new SVGGenericNodeType('use');
+        $copy->setAttribute('xlink:href', '#white-rose')
+            ->setAttribute('transform', 'translate(' . (2.5 * $this->unitSize) . ', ' . (-5 * $this->unitSize) . ')');
+        $polygons[] = $copy;
 
         return $polygons;
     }
