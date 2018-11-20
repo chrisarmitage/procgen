@@ -36,16 +36,6 @@ $variations = [
     'triple',
 ];
 
-$parties = [
-    'bend',
-    'cross',
-    'pale',
-    'fess',
-    'saltire',
-    'chevron',
-    'gyronny',
-];
-
 $queryStrings = [];
 $fieldType = 'ordinary';
 foreach ($ordinariesWithVariations as $ordinary) {
@@ -106,23 +96,49 @@ foreach ($ordinariesWithoutVariations as $ordinary) {
 <hr />
 
 <?php
+
+$parties = [
+    'bend',
+    'cross',
+    'pale',
+    'fess',
+    'saltire',
+    'chevron',
+    'gyronny',
+];
+
+$lineVariations = [
+    'none',
+    'invected',
+    'engrailed',
+    'embattled',
+];
+
 $queryStrings = [];
 
 $fieldType = 'party';
 foreach ($parties as $party) {
-    $queryStrings["FieldType: {$fieldType}\nParty: {$party}"] = http_build_query(
-        [
-            'foreground' => 'ff0000',
-            'background' => 'f0f0f0',
-            'fieldType'  => $fieldType,
-            'party'      => $party,
-        ]
-    );
+    foreach ($lineVariations as $lineVariation) {
+        $queryStrings["FieldType: {$fieldType}\nParty: {$party}\nLine: {$lineVariation}"] = http_build_query(
+            [
+                'foreground' => 'ff0000',
+                'background' => 'f0f0f0',
+                'fieldType'  => $fieldType,
+                'party'      => $party,
+                'lineVariation' => $lineVariation,
+            ]
+        );
+    }
+    $queryStrings[] = null;
 }
 ?>
 <div>
     <?php foreach ($queryStrings as $key => $queryString) : ?>
+    <?php if ($queryString === null) : ?>
+</div><div>
+    <?php else : ?>
         <img src="shield.php?<?= $queryString; ?>" width="128" height="128" title="<?= $key; ?>"/>
+    <?php endif; ?>
     <?php endforeach; ?>
 </div>
 </body>
