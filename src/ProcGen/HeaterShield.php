@@ -152,7 +152,8 @@ class HeaterShield extends Shield
 
         if ($addCharge === 'true' && $ordinaryType !== null) {
 
-            if (mt_rand(1, 2) === 1) {
+            // @TODO Temporarily disable external charges
+            if (mt_rand(1, 2) >= 1) {
                 $party = $heraldicChargeGenerator->random($params, $ordinaryType);
                 if (is_array($party) === false) {
                     $party = [$party];
