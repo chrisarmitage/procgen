@@ -25,7 +25,7 @@ class HeaterShield extends Shield
         $image = new SVG($this->size, $this->size);
         $doc = $image->getDocument();
 
-        $this->drawGrid($doc);
+        // $this->drawGrid($doc);
 
         // Outline
         $path = sprintf('M %d %d', $center + ($this->unitSize * -5), $center +  ($this->unitSize * -6))
