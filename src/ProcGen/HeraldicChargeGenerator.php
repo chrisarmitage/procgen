@@ -49,6 +49,11 @@ class HeraldicChargeGenerator
                 'invertFessHorizontal',
             ],
         ];
+
+        if (array_key_exists($ordinaryType, $layouts) === false) {
+            return [];
+        }
+
         $layout = $layouts[$ordinaryType][mt_rand(0, count($layouts[$ordinaryType]) - 1)];
         $layout = !empty($params['layout']) ? $params['layout'] : $layout;
 
